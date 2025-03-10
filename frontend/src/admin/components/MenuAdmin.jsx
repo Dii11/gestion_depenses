@@ -1,24 +1,28 @@
 import React from 'react';
-import { Link, Routes,Route } from 'react-router-dom'
-import Etablissement from '../../module/etablissement/Etablissement'
-import Audit from '../../module/audit/Audit'
-import Users from '../../module/users/Users'
+import { NavLink } from 'react-router-dom';
+import IconButton from '@mui/material/IconButton';
+import { History, Home, Money, People } from '@mui/icons-material';
 
-import Depenses from '../../module/depenses/Depenses'
 const MenuAdmin = () => {
-    return (
-        <div>
-             <nav>
-            <ul>
-            <li><Link to="/admin/users">Utilisateurs</Link></li>
-          <li><Link to="/admin/etablissements">Etablissements</Link></li>
-          <li><Link to="/admin/depenses">Dépenses</Link></li>
-          <li><Link to="/admin/audit">Audit</Link></li>
-            </ul>
-        </nav>
+  return (
+    <div className='lien'>
+      <NavLink to="/admin/etablissements" >
+        <IconButton><Home /></IconButton>
+      </NavLink>
 
-        </div>
-    );
+      <NavLink to="/admin/depenses" >
+        <IconButton><Money /></IconButton>
+      </NavLink>
+
+      <NavLink to="/admin/audit" >
+        <IconButton><History /></IconButton>
+      </NavLink>
+
+      <NavLink to="/admin/users" >
+        <IconButton><People /></IconButton>
+      </NavLink>
+    </div>
+  );
 };
 
 export default MenuAdmin;
