@@ -5,19 +5,13 @@ import Audit from '../../module/audit/Audit'
 import Users from '../../module/users/Users'
 
 import Depenses from '../../module/depenses/Depenses'
+import MenuAdmin from '../components/MenuAdmin';
 const AdminRoutes = () => {
     return (
         <div>
-        <nav>
-            <ul>
-            <li><Link to="/admin/users">Utilisateurs</Link></li>
-          <li><Link to="/admin/etablissements">Etablissements</Link></li>
-          <li><Link to="/admin/depenses">Dépenses</Link></li>
-          <li><Link to="/admin/audit">Audit</Link></li>
-            </ul>
-        </nav>
-
+       
         <Routes>
+        <Route path="/" element={<MenuAdmin />} />
         <Route path="/users" element={<Users />} />
         <Route path="/etablissements" element={<Etablissement />} />
         <Route path="/depenses" element={<Depenses />} />
