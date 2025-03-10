@@ -21,7 +21,7 @@ function EtablissementForm({ onSubmit }) {
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit(handleSubmitForm)} sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}>
+    <Box component="form" onSubmit={handleSubmit(handleSubmitForm)} >
       <TextField label="Nom" variant="outlined" {...register('nom')} error={!!errors.nom} helperText={errors.nom?.message} />
       <TextField label="Montant du Budget" variant="outlined" type="number" {...register('montantBudget')} error={!!errors.montantBudget} helperText={errors.montantBudget?.message} />
       <Button variant="contained" type="submit">Ajouter</Button>
