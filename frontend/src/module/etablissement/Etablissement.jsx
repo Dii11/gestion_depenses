@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,Suspense,lazy } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchEtablissements,
@@ -7,15 +7,10 @@ import {
   deleteEtablissement,
 } from "./features/etablissementSlice";
 import EtablissementForm from "./components/EtablissementForm";
-import EtablissementList from "./components/EtablissementList";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import { ConfirmationDialog, NotificationDialog } from "../../components/BoiteDeDialog";
+import {  NotificationDialog } from "../../components/BoiteDeDialog";
 import { Typography } from "@mui/material";
+
+const EtablissementList = lazy(() => import('./components/EtablissementList'));
 
 function Etablissements() {
   const dispatch = useDispatch();
@@ -84,11 +79,13 @@ function Etablissements() {
         {afficherForm ? (
           <>
               <EtablissementForm onSubmit={handleAddEtablissement} />
+              <Suspense fallback={<div>Chargement du tableau...</div>}>
               <EtablissementList
                 etablissements={etablissements}
                 onEdit={handleEditEtablissement}
                 onDelete={handleDeleteEtablissement}
               />
+              </Suspense>
           </>
         ) : (
             <EtablissementList

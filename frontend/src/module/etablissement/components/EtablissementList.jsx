@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import {
   IconButton,
-  Button,
   Paper,
   TableBody,
-  SvgIcon,
   Table,
   TableCell,
   TableContainer,
   TableHead,
   TablePagination,
   TableRow,
-  Fab, TextField,
-  InputAdornment
+  TextField,
+  InputAdornment,
 } from "@mui/material";
-import { Edit, Delete, AddBusiness, Filter, Search, FilterList } from "@mui/icons-material";
+import {
+  Edit,
+  Delete,
+  AddBusiness,
+  Search,
+  FilterList,
+} from "@mui/icons-material";
 import {
   ConfirmationDialog,
   EditDialog,
 } from "../../../components/BoiteDeDialog";
+import { FixedSizeList as List } from "react-window"; //Import de react-window
 
 function EtablissementList({
   etablissements,
@@ -26,13 +31,13 @@ function EtablissementList({
   onDelete,
   afficherFormulaire,
 }) {
-
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedEtablissement, setSelectedEtablissement] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleEditClick = (etablissement) => {
     setSelectedEtablissement(etablissement);
@@ -66,33 +71,46 @@ function EtablissementList({
     setPage(0);
   };
 
-  const emptyRows =
-    rowsPerPage -
-    Math.min(rowsPerPage, etablissements.length - page * rowsPerPage);
+  const handleSearchChange = useCallback((event) => {
+    setSearchTerm(event.target.value);
+    setPage(0); //Reset page number when search term changes.
+  }, []);
 
+  const filteredEtablissements = useMemo(() => {
+    return etablissements.filter((etablissement) =>
+      etablissement.nom.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }, [etablissements, searchTerm]);
+
+  const emptyRows = rowsPerPage;
   return (
     <div>
-    <div className="ensemble-filtre">
-      <IconButton onClick={afficherFormulaire} color="primary" ><AddBusiness  fontSize="large"/></IconButton>
-      <div className="filtre">
-      <TextField
-      id="search"
-      label="Recherche"
-      type="search"
-      variant="standard"
-      slotProps={{
-        input: {
-          endAdornment: (
-            <InputAdornment position="end">
-              <Search color="action" />
-            </InputAdornment>
-          ),
-        },
-      }}
-    />
-       <IconButton><FilterList/></IconButton> 
-       
-      </div>
+      <div className="ensemble-filtre">
+        <IconButton onClick={afficherFormulaire} color="primary">
+          <AddBusiness fontSize="large" />
+        </IconButton>
+        <div className="filtre">
+          <TextField
+            id="search"
+            label="Recherche"
+            type="search"
+            onChange={handleSearchChange}
+            value={searchTerm}
+            variant="standard"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Search color="action" />
+                  </InputAdornment>
+                ),
+              },
+            }}
+          />
+          <IconButton>
+            <FilterList />
+          </IconButton>
+        </div>
       </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -107,18 +125,17 @@ function EtablissementList({
                 </strong>
               </TableCell>
               <TableCell align="right">
-                <strong aria-label="Actions sur l'établissement">
-                </strong>
+                <strong aria-label="Actions sur l'établissement"></strong>
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? etablissements.slice(
+              ? filteredEtablissements.slice(
                   page * rowsPerPage,
                   page * rowsPerPage + rowsPerPage
                 )
-              : etablissements
+              : filteredEtablissements
             ).map((etablissement) => (
               <TableRow
                 key={etablissement.id}
@@ -160,7 +177,6 @@ function EtablissementList({
         />
       </TableContainer>
 
-      {/* Dialog pour la modification */}
       <EditDialog
         open={openEditDialog}
         onClose={handleClose}
@@ -168,7 +184,6 @@ function EtablissementList({
         onEdit={onEdit}
       />
 
-      {/* Dialog pour la confirmation de suppression */}
       <ConfirmationDialog
         open={confirmOpen}
         onClose={handleConfirmClose}
