@@ -14,6 +14,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { ConfirmationDialog, NotificationDialog } from "../../components/BoiteDeDialog";
 
 function Etablissements() {
   const dispatch = useDispatch();
@@ -97,15 +98,13 @@ function Etablissements() {
             />
         )}
       </div>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Notification</DialogTitle>
-        <DialogContent>
-          <DialogContentText>{message}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Fermer</Button>
-        </DialogActions>
-      </Dialog>
+    
+      <NotificationDialog
+        open={open}
+        onClose={handleClose}
+        message={message}
+        handleClose={handleClose}
+      />
     </div>
   );
   

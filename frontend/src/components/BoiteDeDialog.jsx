@@ -24,6 +24,20 @@ export function ConfirmationDialog({ open, onClose, onConfirm, title, message })
   );
 }
 
+export function NotificationDialog({ open, onClose, title, message }) {
+  return (
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{message}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose}>Annuler</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 export function EditDialog({ open, onClose, etablissement, onEdit }) {
   return (
     <Dialog open={open} onClose={onClose}>
