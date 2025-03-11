@@ -7,8 +7,8 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
 const schema = yup.object().shape({
-  nom: yup.string().required('Le nom est requis'),
-  montantBudget: yup.number().positive('Le montant doit être positif').required('Le montant est requis'),
+  nom: yup.string().required('Le champ ne doit pas être vide'),
+  montantBudget: yup.number().positive('ajouter un montant positif')
 });
 
 function EtablissementForm({ initialValues, onSubmit }) {

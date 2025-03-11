@@ -22,7 +22,7 @@ function Etablissements() {
   );
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
-
+  const [afficherForm, setAfficherForm] = useState(false)
   useEffect(() => {
     dispatch(fetchEtablissements());
   }, [dispatch]);
@@ -68,15 +68,34 @@ function Etablissements() {
   const handleClose = () => {
     setOpen(false);
   };
+  const afficherFormulaire=()=>{
+    setAfficherForm(true)
+ 
+  }
 
 
 
   return (
     <div className="ensemble">
       <h2>Gestion des Etablissements</h2>
-      <div className="page">
-        <EtablissementForm onSubmit={handleAddEtablissement} />
-        <EtablissementList etablissements={etablissements} onEdit={handleEditEtablissement} onDelete={handleDeleteEtablissement} />
+      <div className={`page ${afficherForm ? "afficher" : ""}`}>
+        {afficherForm ? (
+          <>
+              <EtablissementForm onSubmit={handleAddEtablissement} />
+              <EtablissementList
+                etablissements={etablissements}
+                onEdit={handleEditEtablissement}
+                onDelete={handleDeleteEtablissement}
+              />
+          </>
+        ) : (
+            <EtablissementList
+              etablissements={etablissements}
+              onEdit={handleEditEtablissement}
+              onDelete={handleDeleteEtablissement}
+              afficherFormulaire={afficherFormulaire}
+            />
+        )}
       </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Notification</DialogTitle>
@@ -89,6 +108,7 @@ function Etablissements() {
       </Dialog>
     </div>
   );
+  
 }
 
 export default Etablissements;
