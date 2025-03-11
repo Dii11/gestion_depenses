@@ -86,7 +86,12 @@ function EtablissementList({
   return (
     <div>
       <div className="ensemble-filtre">
-        <IconButton onClick={afficherFormulaire} color="primary">
+        <IconButton
+          onClick={afficherFormulaire}
+          color="primary"
+          aria-label="Ajouter un nouvel établissement"
+          title="Ajouter un nouvel établissement"
+        >
           <AddBusiness fontSize="large" />
         </IconButton>
         <div className="filtre">
@@ -94,6 +99,7 @@ function EtablissementList({
             id="search"
             label="Recherche"
             type="search"
+            aria-label="rechercher un  établissement"
             onChange={handleSearchChange}
             value={searchTerm}
             variant="standard"
@@ -107,7 +113,7 @@ function EtablissementList({
               },
             }}
           />
-          <IconButton>
+          <IconButton aria-label="filtrer un  établissement">
             <FilterList />
           </IconButton>
         </div>
@@ -125,7 +131,6 @@ function EtablissementList({
                 </strong>
               </TableCell>
               <TableCell align="right">
-                <strong aria-label="Actions sur l'établissement"></strong>
               </TableCell>
             </TableRow>
           </TableHead>
@@ -148,11 +153,15 @@ function EtablissementList({
                   {etablissement.montantBudget}
                 </TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={() => handleEditClick(etablissement)}>
+                  <IconButton
+                    aria-label="modifer un  établissement"
+                    onClick={() => handleEditClick(etablissement)}
+                  >
                     <Edit />
                   </IconButton>
                   <IconButton
                     onClick={() => handleDeleteClick(etablissement.id)}
+                    aria-label="supprimer un  établissement"
                   >
                     <Delete />
                   </IconButton>

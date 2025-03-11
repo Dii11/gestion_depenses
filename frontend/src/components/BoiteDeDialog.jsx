@@ -32,7 +32,7 @@ export function NotificationDialog({ open, onClose, title, message }) {
         <DialogContentText>{message}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>Annuler</Button>
+        <Button onClick={onClose} aria-label='fermer la boîte '>Annuler</Button>
       </DialogActions>
     </Dialog>
   );
