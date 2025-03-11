@@ -15,6 +15,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import { ConfirmationDialog, NotificationDialog } from "../../components/BoiteDeDialog";
+import { Typography } from "@mui/material";
 
 function Etablissements() {
   const dispatch = useDispatch();
@@ -78,7 +79,7 @@ function Etablissements() {
 
   return (
     <div className="ensemble">
-      <h2>Gestion des Etablissements</h2>
+      <Typography variant='h4' color="success">Gestion des Etablissements</Typography>
       <div className={`page ${afficherForm ? "afficher" : ""}`}>
         {afficherForm ? (
           <>

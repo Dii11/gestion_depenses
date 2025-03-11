@@ -1,26 +1,31 @@
-import React, { useState } from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
-import EtablissementForm from './EtablissementForm';
-import { DialogActions, DialogContentText } from '@mui/material';
-import TablePagination from '@mui/material/TablePagination';
-import { ConfirmationDialog, EditDialog } from '../../../components/BoiteDeDialog';
+import React, { useState } from "react";
+import {
+  IconButton,
+  Button,
+  Paper,
+  TableBody,
+  SvgIcon,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  Fab, TextField,
+  InputAdornment
+} from "@mui/material";
+import { Edit, Delete, AddBusiness, Filter, Search, FilterList } from "@mui/icons-material";
+import {
+  ConfirmationDialog,
+  EditDialog,
+} from "../../../components/BoiteDeDialog";
 
-function EtablissementList({ etablissements, onEdit, onDelete,afficherFormulaire }) {
-  const [open, setOpen] = useState(false);
+function EtablissementList({
+  etablissements,
+  onEdit,
+  onDelete,
+  afficherFormulaire,
+}) {
 
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedEtablissement, setSelectedEtablissement] = useState(null);
@@ -61,34 +66,78 @@ function EtablissementList({ etablissements, onEdit, onDelete,afficherFormulaire
     setPage(0);
   };
 
-  const emptyRows = rowsPerPage - Math.min(rowsPerPage, etablissements.length - page * rowsPerPage);
+  const emptyRows =
+    rowsPerPage -
+    Math.min(rowsPerPage, etablissements.length - page * rowsPerPage);
 
   return (
     <div>
-    <Button onClick={afficherFormulaire}>ajouter</Button>
+    <div className="ensemble-filtre">
+      <IconButton onClick={afficherFormulaire} color="primary" ><AddBusiness  fontSize="large"/></IconButton>
+      <div className="filtre">
+      <TextField
+      id="search"
+      label="Recherche"
+      type="search"
+      variant="standard"
+      slotProps={{
+        input: {
+          endAdornment: (
+            <InputAdornment position="end">
+              <Search color="action" />
+            </InputAdornment>
+          ),
+        },
+      }}
+    />
+       <IconButton><FilterList/></IconButton> 
+       
+      </div>
+      </div>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Nom</TableCell>
-              <TableCell align="right">Montant du Budget</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>
+                <strong aria-label="Nom de l'établissement">Nom</strong>
+              </TableCell>
+              <TableCell align="right">
+                <strong aria-label="Montant du budget de l'établissement">
+                  Montant du Budget
+                </strong>
+              </TableCell>
+              <TableCell align="right">
+                <strong aria-label="Actions sur l'établissement">
+                </strong>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {(rowsPerPage > 0
-              ? etablissements.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              ? etablissements.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage
+                )
               : etablissements
             ).map((etablissement) => (
-              <TableRow key={etablissement.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                <TableCell component="th" scope="row">{etablissement.nom}</TableCell>
-                <TableCell align="right">{etablissement.montantBudget}</TableCell>
+              <TableRow
+                key={etablissement.id}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {etablissement.nom}
+                </TableCell>
+                <TableCell align="right">
+                  {etablissement.montantBudget}
+                </TableCell>
                 <TableCell align="right">
                   <IconButton onClick={() => handleEditClick(etablissement)}>
-                    <EditIcon />
+                    <Edit />
                   </IconButton>
-                  <IconButton onClick={() => handleDeleteClick(etablissement.id)}>
-                    <DeleteIcon />
+                  <IconButton
+                    onClick={() => handleDeleteClick(etablissement.id)}
+                  >
+                    <Delete />
                   </IconButton>
                 </TableCell>
               </TableRow>
@@ -111,8 +160,8 @@ function EtablissementList({ etablissements, onEdit, onDelete,afficherFormulaire
         />
       </TableContainer>
 
-       {/* Dialog pour la modification */}
-       <EditDialog
+      {/* Dialog pour la modification */}
+      <EditDialog
         open={openEditDialog}
         onClose={handleClose}
         etablissement={selectedEtablissement}
