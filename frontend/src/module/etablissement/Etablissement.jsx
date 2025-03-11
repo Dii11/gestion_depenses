@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   fetchEtablissements,
   addEtablissement,
+  updateEtablissement,
+  deleteEtablissement,
 } from "./features/etablissementSlice";
 import EtablissementForm from "./components/EtablissementForm";
 import EtablissementList from "./components/EtablissementList";
@@ -37,17 +39,44 @@ function Etablissements() {
         setOpen(true);
       });
   };
+  const handleEditEtablissement = (etablissement) => {
+    dispatch(updateEtablissement(etablissement))
+      .unwrap()
+      .then(() => {
+        setMessage('Etablissement modifié avec succès');
+        setOpen(true);
+      })
+      .catch(() => {
+        setMessage('Erreur lors de la modification de l\'établissement');
+        setOpen(true);
+      });
+  };
+
+  const handleDeleteEtablissement = (id) => {
+    dispatch(deleteEtablissement(id))
+      .unwrap()
+      .then(() => {
+        setMessage('Etablissement supprimé avec succès');
+        setOpen(true);
+      })
+      .catch(() => {
+        setMessage('Erreur lors de la suppression de l\'établissement');
+        setOpen(true);
+      });
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
+
+
 
   return (
     <div className="ensemble">
       <h2>Gestion des Etablissements</h2>
       <div className="page">
         <EtablissementForm onSubmit={handleAddEtablissement} />
-        <EtablissementList etablissements={etablissements} />
+        <EtablissementList etablissements={etablissements} onEdit={handleEditEtablissement} onDelete={handleDeleteEtablissement} />
       </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Notification</DialogTitle>
