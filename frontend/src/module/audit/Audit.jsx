@@ -1,10 +1,9 @@
 import React from 'react';
+import AuditList from './components/AuditList';
 
 const Audit = () => {
     return (
-        <div>
-            auditnjk;jb
-        </div>
+       <AuditList/>
     );
 };
 

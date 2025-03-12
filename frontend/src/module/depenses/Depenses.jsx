@@ -33,6 +33,8 @@ function Depenses() {
       .then(() => {
         setMessage("Dépense ajoutée avec succès");
         setOpen(true);
+        dispatch
+        (fetchDepenses());
       })
       .catch(() => {
         setMessage("Erreur lors de l'ajout de la dépense");
@@ -46,6 +48,8 @@ function Depenses() {
       .then(() => {
         setMessage("Dépense modifiée avec succès");
         setOpen(true);
+        dispatch
+        (fetchDepenses());
       })
       .catch(() => {
         setMessage("Erreur lors de la modification de la dépense");
@@ -59,6 +63,8 @@ function Depenses() {
       .then(() => {
         setMessage("Dépense supprimée avec succès");
         setOpen(true);
+        dispatch
+        (fetchDepenses());
       })
       .catch(() => {
         setMessage("Erreur lors de la suppression de la dépense");
@@ -101,7 +107,7 @@ function Depenses() {
             onEdit={handleEditDepense}
             onDelete={handleDeleteDepense}
             afficherFormulaire={afficherFormulaire}
-            etablissements={etablissements} // Passer les établissements à DepenseList
+            etablissements={etablissements} 
           />
         )}
       </div>

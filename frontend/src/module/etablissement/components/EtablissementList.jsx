@@ -73,14 +73,14 @@ function EtablissementList({
 
   const handleSearchChange = useCallback((event) => {
     setSearchTerm(event.target.value);
-    setPage(0); //Reset page number when search term changes.
+    setPage(0);
   }, []);
 
   const filteredEtablissements = useMemo(() => {
     return etablissements.filter((etablissement) =>
-      etablissement.nom.toLowerCase().includes(searchTerm.toLowerCase())
+        etablissement.nom && etablissement.nom.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  }, [etablissements, searchTerm]);
+}, [etablissements, searchTerm]);
 
   const emptyRows = rowsPerPage;
   return (
@@ -143,14 +143,14 @@ function EtablissementList({
               : filteredEtablissements
             ).map((etablissement) => (
               <TableRow
-                key={etablissement.id}
+                key={etablissement.n_Etab}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
                   {etablissement.nom}
                 </TableCell>
                 <TableCell align="right">
-                  {etablissement.montantBudget}
+                  {etablissement.Montant_Budget}
                 </TableCell>
                 <TableCell align="right">
                   <IconButton
@@ -160,7 +160,7 @@ function EtablissementList({
                     <Edit />
                   </IconButton>
                   <IconButton
-                    onClick={() => handleDeleteClick(etablissement.id)}
+                    onClick={() => handleDeleteClick(etablissement.n_Etab)}
                     aria-label="supprimer un  établissement"
                   >
                     <Delete />

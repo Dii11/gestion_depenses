@@ -16,9 +16,9 @@ export const updateEtablissement = createAsyncThunk('etablissements/updateEtabli
   return response.data;
 });
 
-export const deleteEtablissement = createAsyncThunk('etablissements/deleteEtablissement', async (id) => {
-  await etablissementsApi.deleteEtablissement(id);
-  return id;
+export const deleteEtablissement = createAsyncThunk('etablissements/deleteEtablissement', async (n_Etab) => {
+  await etablissementsApi.deleteEtablissement(n_Etab);
+  return n_Etab;
 });
 const etablissementsSlice = createSlice({
   name: 'etablissements',
@@ -45,13 +45,13 @@ const etablissementsSlice = createSlice({
         state.etablissements.push(action.payload);
       })
       .addCase(updateEtablissement.fulfilled, (state, action) => {
-        const index = state.etablissements.findIndex((etablissement) => etablissement.id === action.payload.id);
+        const index = state.etablissements.findIndex((etablissement) => etablissement.n_Etab === action.payload.n_Etab);
         if (index !== -1) {
           state.etablissements[index] = action.payload;
         }
       })
       .addCase(deleteEtablissement.fulfilled, (state, action) => {
-        state.etablissements = state.etablissements.filter((etablissement) => etablissement.id !== action.payload);
+        state.etablissements = state.etablissements.filter((etablissement) => etablissement.n_Etab !== action.payload);
       });
   },
 });

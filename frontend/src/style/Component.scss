@@ -21,10 +21,50 @@ form {
 .ensemble-filtre {
   display: flex;
   justify-content: space-between;
-  align-items:center ;
+  align-items: center;
 }
 .filtre {
+  display: flex;
+  gap: 2%;
+}
 
-display: flex;
-gap: 2%;
+//audit depense
+.ensemble_audit{
+  padding: 2%;
+}
+.affiche_stat {
+  display: flex;
+  div {
+    flex-grow: 1;
+  }
+}
+
+//entete
+.entete{
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ .espace_compte{
+  border: 1px inset rgba(129, 129, 129, 0.231);
+  padding: 0 2%;
+  border-radius: 50px;
+ }
+
+
+}
+
+.page_pple{
+  padding: 1%;
+}
+//menu
+.lien{
+  display: flex;
+  justify-content: center;
+  gap:2%;
+  margin-top: 15%;
+  a{
+    background-color: red;
+    border-radius: 20px;
+    padding: 2%;
+  }
 }

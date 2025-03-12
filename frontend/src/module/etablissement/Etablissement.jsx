@@ -30,6 +30,8 @@ function Etablissements() {
       .then(() => {
         setMessage("Etablissement ajouté avec succès");
         setOpen(true);
+        dispatch(fetchEtablissements());
+
       })
       .catch(() => {
         setMessage("Erreur lors de l'ajout de l'établissement");
@@ -42,6 +44,8 @@ function Etablissements() {
       .then(() => {
         setMessage('Etablissement modifié avec succès');
         setOpen(true);
+        dispatch(fetchEtablissements()); 
+
       })
       .catch(() => {
         setMessage('Erreur lors de la modification de l\'établissement');

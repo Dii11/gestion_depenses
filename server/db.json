@@ -1,0 +1,17 @@
+{
+  "etablissements": [
+    {
+      "idEtab": 1,
+      "nom": "EST",
+      "montantBudget": 10002,
+      "id": "c90a"
+    },
+    {
+      "id": "bc1d",
+      "montantBudget": 200,
+      "nom": "ENI"
+    }
+  ],
+  "depenses": [],
+  "audit-depenses": []
+}

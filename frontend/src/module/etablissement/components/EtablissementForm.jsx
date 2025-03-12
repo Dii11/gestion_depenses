@@ -6,7 +6,7 @@ import { Box, Button, TextField } from "@mui/material";
 
 const schema = yup.object().shape({
   nom: yup.string().required("Le champ ne doit pas être vide"),
-  montantBudget: yup.number().positive("ajouter un montant positif"),
+  Montant_Budget: yup.number().positive("ajouter un montant positif"),
 });
 
 function EtablissementForm({ initialValues, onSubmit }) {
@@ -22,7 +22,7 @@ function EtablissementForm({ initialValues, onSubmit }) {
   useEffect(() => {
     if (initialValues) {
       setValue("nom", initialValues.nom);
-      setValue("montantBudget", initialValues.montantBudget);
+      setValue("Montant_Budget", initialValues.Montant_Budget);
     }
   }, [initialValues, setValue]);
 
@@ -50,9 +50,9 @@ function EtablissementForm({ initialValues, onSubmit }) {
         label="Montant du Budget"
         variant="outlined"
         type="number"
-        {...register("montantBudget")}
-        error={!!errors.montantBudget}
-        helperText={errors.montantBudget?.message}
+        {...register("Montant_Budget")}
+        error={!!errors.Montant_Budget}
+        helperText={errors.Montant_Budget?.message}
       />
       <Button
         variant="contained"

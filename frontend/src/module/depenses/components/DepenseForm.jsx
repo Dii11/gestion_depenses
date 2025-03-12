@@ -1,43 +1,54 @@
-import React, { useEffect, useCallback, memo } from "react";
+import React, { useEffect, useCallback, useRef, memo } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Box, Button, TextField, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 
 const schema = yup.object().shape({
-  nEtab: yup.string().required("Le numéro d'établissement est requis"),
-  montant: yup.number().positive("Le montant doit être positif").required("Le montant est requis"),
-  description: yup.string().required("La description est requise"),
+  n_Etab: yup.number().required("Veuillez sélécionner un établissement"),
+  depense: yup.number().positive("Le depense doit être positif").required("Veuillez saisir un depense"),
+  description: yup.string().required("Veuillez ajouter une description"),
 });
 
-function DepenseForm({ initialValues, onSubmit, etablissements }) {
+function DepenseForm({ initialValues, onSubmit, etablissements, onCancel }) { // Ajout de la prop onCancel
+  const initialValuesRef = useRef(initialValues);
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      nEtab: initialValues?.nEtab || '',
-      montant: initialValues?.montant || '',
-      description: initialValues?.description || '',
-    }
+      n_Etab: 0,
+      depense: 0,
+      description: "",
+    },
   });
 
   useEffect(() => {
     if (initialValues) {
-      setValue("nEtab", initialValues.nEtab);
-      setValue("montant", initialValues.montant);
-      setValue("description", initialValues.description);
+      initialValuesRef.current = initialValues;
+      reset({
+        n_Etab: initialValues.n_Etab,
+        depense: initialValues.depense,
+        description: initialValues.description,
+      });
+    } else {
+      reset({
+        n_Etab: 0,
+        depense: 0,
+        description: "",
+      });
     }
-  }, [initialValues, setValue]);
+  }, [initialValues, reset]);
+
   const handleSubmitForm = useCallback(
     (data) => {
-      onSubmit(data);
-
+      onSubmit(data)
+      console.log(data);
     },
-    [onSubmit]
+    [onSubmit, initialValues]
   );
 
   return (
@@ -47,28 +58,30 @@ function DepenseForm({ initialValues, onSubmit, etablissements }) {
       sx={{ "& > :not(style)": { m: 1, width: "25ch" } }}
     >
       <FormControl fullWidth>
-        <InputLabel id="nEtab-label">Numéro d'établissement</InputLabel>
+        <InputLabel id="n_Etab-label">Numéro d'établissement</InputLabel>
         <Select
-          labelId="nEtab-label"
-          id="nEtab"
-          {...register("nEtab")}
-          error={!!errors.nEtab}
+          labelId="n_Etab-label"
+          id="n_Etab"
+          {...register("n_Etab")}
+          error={!!errors.n_Etab}
           label="Numéro d'établissement"
+          defaultValue={initialValues?.n_Etab || 0}
         >
-          {etablissements.map((etablissement,index) => (
-            <MenuItem key={index} value={etablissement.nEtab}>
-              {etablissement.nom} ({etablissement.nEtab})
-            </MenuItem>
-          ))}
+          {etablissements &&
+            etablissements.map((etablissement) => (
+              <MenuItem key={etablissement.n_Etab} value={etablissement.n_Etab}>
+                n° {etablissement.n_Etab} - {etablissement.nom}
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
       <TextField
-        label="Montant"
+        label="depense"
         variant="outlined"
         type="number"
-        {...register("montant")}
-        error={!!errors.montant}
-        helperText={errors.montant?.message}
+        {...register("depense")}
+        error={!!errors.depense}
+        helperText={errors.depense?.message}
       />
       <TextField
         label="Description"
@@ -84,6 +97,15 @@ function DepenseForm({ initialValues, onSubmit, etablissements }) {
       >
         {initialValues ? "Enregistrer" : "Ajouter"}
       </Button>
+      {initialValues && (
+        <Button
+          variant="outlined"
+          onClick={onCancel}
+          aria-label="annuler la modification"
+        >
+          Annuler
+        </Button>
+      )}
     </Box>
   );
 }
