@@ -1,3 +1,5 @@
+$couleur1: #11b965;
+$couleur2: #014C16;
 .ensemble {
   display: flex;
   flex-direction: column;
@@ -29,7 +31,7 @@ form {
 }
 
 //audit depense
-.ensemble_audit{
+.ensemble_audit {
   padding: 2%;
 }
 .affiche_stat {
@@ -40,31 +42,43 @@ form {
 }
 
 //entete
-.entete{
- display: flex;
- justify-content: space-between;
- align-items: center;
- .espace_compte{
-  border: 1px inset rgba(129, 129, 129, 0.231);
-  padding: 0 2%;
-  border-radius: 50px;
- }
-
-
+.entete {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .espace_compte {
+    border: 1px inset rgba(129, 129, 129, 0.231);
+    padding: 0 2%;
+    border-radius: 50px;
+  }
 }
 
-.page_pple{
+.page_pple {
   padding: 1%;
 }
 //menu
-.lien{
+.lien {
   display: flex;
   justify-content: center;
-  gap:2%;
+  gap: 2%;
   margin-top: 15%;
-  a{
-    background-color: red;
+  a {
+    width: 15%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
     border-radius: 20px;
+    background-color: #D2FBD0;
     padding: 2%;
+    .MuiTypography-root {
+      color: $couleur2;
+    }
+    &:hover {
+      background-color: $couleur1;
+      scale: 1.1;
+     
+    }
   }
 }
