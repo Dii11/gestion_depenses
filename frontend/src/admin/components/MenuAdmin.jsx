@@ -22,10 +22,10 @@ const MenuAdmin = () => {
         <Typography variant='h6' color='secondary'>Audition dépenses</Typography>
       </NavLink>
 
-      <NavLink to="/admin/users" >
+      {/* <NavLink to="/admin/users" >
         <IconButton><People /></IconButton>
         <Typography variant='h6' color='secondary'>Employés</Typography>
-      </NavLink>
+      </NavLink> */}
     </div>
   );
 };

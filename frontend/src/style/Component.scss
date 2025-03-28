@@ -1,6 +1,12 @@
 $couleur1: #11b965;
 $couleur2: #014C16;
 $couleur3:#89FFAA;
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .ensemble {
   display: flex;
   flex-direction: column;

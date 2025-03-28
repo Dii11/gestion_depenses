@@ -2,10 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Admin from './admin/Admin';
 import User from './user/User';
-// import Auth from './modules/auth/Auth';
-import ProtectedRoute from './components/ProtectedRoute'; 
 import Auth from './module/auth/Auth';
-import Registration from './module/auth/adminbd/src/modules/auth/Registration';
+import Registration from './module/auth/Registration';
 
 function App() {
   return (
