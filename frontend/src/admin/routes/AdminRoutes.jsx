@@ -16,8 +16,7 @@ const AdminRoutes = () => {
         <Route path="/etablissements" element={<Etablissement />} />
         <Route path="/depenses" element={<Depenses />} />
         <Route path="/audit" element={<Audit />} />
-        </Routes>
-           
+        </Routes>       
         </div>
     );
 };

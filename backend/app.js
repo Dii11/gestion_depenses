@@ -3,15 +3,114 @@ const mysql = require('mysql2/promise');
 const { dbConfig } = require('./config');
 const cors = require('cors');
 
-
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const app = express();
 const port = 3000;
 app.use(cors())
 app.use(express.json());
 
+const secretKey = '1234'; 
 async function connectDB() {
   return mysql.createConnection(dbConfig);
+
 }
+
+app.post('/login', async (req, res) => {
+  try {
+      const { email, password } = req.body;
+      const connection = await connectDB();
+      const [users] = await connection.execute('SELECT * FROM user WHERE email = ?', [email]);
+      connection.end();
+
+      if (users.length === 0) {
+          return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+      }
+
+      const user = users[0];
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (!passwordMatch) {
+          return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
+      }
+
+      const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, secretKey, { expiresIn: '1h' });
+      res.json({ token, user: {id: user.idUser, name: user.name, email: user.email, role: user.role} });
+  } catch (error) {
+      console.error("Erreur lors de la connexion:", error);
+      res.status(500).json({ message: error.message });
+  }
+});
+// Route d'inscription
+app.post('/register', async (req, res) => {
+  try {
+      const { name, email, password, role } = req.body;
+
+      // Vérifier si l'utilisateur existe déjà
+      const connection = await connectDB();
+      const [existingUsers] = await connection.execute(
+          'SELECT * FROM user WHERE email = ?', // Utilisation cohérente de "Users"
+          [email]
+      );
+
+      if (existingUsers.length > 0) {
+          connection.end();
+          return res.status(400).json({ message: 'Utilisateur déjà enregistré' });
+      }
+
+      // Hacher le mot de passe
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      // Créer un nouvel utilisateur
+      await connection.execute(
+          'INSERT INTO user (name, email, password, role) VALUES (?, ?, ?, ?)', // Utilisation cohérente de "Users"
+          [name, email, hashedPassword, role || 'user']
+      );
+
+      connection.end();
+      res.status(201).json({ message: 'Utilisateur créé avec succès' });
+  } catch (error) {
+      console.error("Erreur lors de l'inscription:", error);
+      res.status(500).json({ message: error.message });
+  }
+});
+
+// Middleware d'authentification JWT
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+      return res.sendStatus(401);
+  }
+
+  jwt.verify(token, secretKey, (err, user) => {
+      if (err) {
+          return res.sendStatus(403);
+      }
+      req.user = user;
+      next();
+  });
+}
+
+// Route pour récupérer tous les utilisateurs (protégée)
+app.get('/users', async (req, res) => {
+  try {
+      const connection = await connectDB();
+      const [users] = await connection.execute('SELECT * FROM user');
+      connection.end();
+
+      // You might want to exclude sensitive data like password before sending the response
+      const usersWithoutPassword = users.map(user => {
+          const { password, ...userWithoutPassword } = user;
+          return userWithoutPassword;
+      });
+
+      res.json(usersWithoutPassword);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+});
 
 // Routes pour Etablissement
 app.get('/etablissements', async (req, res) => {
@@ -107,6 +206,8 @@ app.get('/depenses/:n_depense', async (req, res) => {
 
 app.post('/depenses', async (req, res) => {
   const { n_Etab, depense,description } = req.body;
+
+
   try {
     const connection = await connectDB();
     await connection.execute('INSERT INTO Depense (n_Etab, depense,description) VALUES (?, ?, ?)', [n_Etab, depense,description]);

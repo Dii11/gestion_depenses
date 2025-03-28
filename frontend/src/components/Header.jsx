@@ -1,13 +1,27 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import { Person } from "@mui/icons-material";
-import DialogAuth from "../module/auth/DialogAuth";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [openMenu, setOpenMenu] = useState(false);
-    const [openDialog, setOpenDialog] = useState(false); // État pour contrôler l'ouverture de DialogAuth
+    const [openDialog, setOpenDialog] = useState(false);
     const fabRef = useRef(null);
+    const [userName, setUserName] = useState("");
+
+    const [email, setEmail] = useState("");
+    const navigate = useNavigate();
+
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (user) {
+            setUserName(user.user.name);
+            setEmail(user.user.email)
+        }
+
+    }, []);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -28,11 +42,18 @@ const Header = () => {
         setOpenDialog(false);
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        navigate('/')
+        window.location.reload(); 
+    };
+
     return (
         <div className="entete">
             <div>logo</div>
             <div className="espace_compte">
-                <span>nom utilisateur</span>
+                <span>{userName}</span>
                 <IconButton
                     color="primary"
                     aria-label="déconnexion"
@@ -54,11 +75,17 @@ const Header = () => {
                         horizontal: "right",
                     }}
                 >
-                    <MenuItem disabled>Nom utilisateur</MenuItem>
+                    <MenuItem disabled sx={{display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+                    <div>
+                    {userName}
+                    </div>
+                    <>
+                    {email}
+                    </>
+                    </MenuItem>
                     <MenuItem onClick={handleOpenDialog}>Changer de compte</MenuItem>
-                    <MenuItem onClick={handleOpenDialog}>Se déconnecter</MenuItem>
+                    <MenuItem onClick={handleLogout}>Se déconnecter</MenuItem>
                 </Menu>
-                {openDialog && <DialogAuth onClose={handleCloseDialog} />}
             </div>
         </div>
     );

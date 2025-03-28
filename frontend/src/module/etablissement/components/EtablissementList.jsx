@@ -23,7 +23,6 @@ import {
   ConfirmationDialog,
   EditDialog,
 } from "../../../components/BoiteDeDialog";
-import { FixedSizeList as List } from "react-window"; //Import de react-window
 
 function EtablissementList({
   etablissements,
@@ -169,7 +168,7 @@ function EtablissementList({
               </TableRow>
             ))}
             {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
+              <TableRow style={{ height: 5 * emptyRows }}>
                 <TableCell colSpan={3} />
               </TableRow>
             )}

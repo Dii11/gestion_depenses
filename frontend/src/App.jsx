@@ -5,11 +5,13 @@ import User from './user/User';
 // import Auth from './modules/auth/Auth';
 import ProtectedRoute from './components/ProtectedRoute'; 
 import Auth from './module/auth/Auth';
+import Registration from './module/auth/adminbd/src/modules/auth/Registration';
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/register" element={<Registration />} />
         <Route path='/admin/*' element={<Admin/>}/>
         <Route path='/user/*' element={<User/>}/>
          <Route exact path="/" element={<Auth />} /> 
