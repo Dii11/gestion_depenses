@@ -75,23 +75,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// Middleware d'authentification JWT
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-
-  if (!token) {
-      return res.sendStatus(401);
-  }
-
-  jwt.verify(token, secretKey, (err, user) => {
-      if (err) {
-          return res.sendStatus(403);
-      }
-      req.user = user;
-      next();
-  });
-}
 
 // Route pour récupérer tous les utilisateurs (protégée)
 app.get('/users', async (req, res) => {
@@ -206,24 +189,36 @@ app.get('/depenses/:n_depense', async (req, res) => {
 
 app.post('/depenses', async (req, res) => {
   const { n_Etab, depense,description } = req.body;
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-
-  try {
+  const decodedToken = jwt.decode(token);
+  const email = decodedToken.email; 
     const connection = await connectDB();
-    await connection.execute('INSERT INTO Depense (n_Etab, depense,description) VALUES (?, ?, ?)', [n_Etab, depense,description]);
+    await connection.execute('SET @current_user_email = ?', [email]); // Insérer l'email ici
+        await connection.execute('INSERT INTO depense (n_Etab, depense,description) VALUES (?, ?, ?)', [n_Etab, depense,description]);
     connection.end();
     res.status(201).json({ message: 'Dépense créée avec succès' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
+  
 });
+
 
 app.put('/depenses/:n_depense', async (req, res) => {
   const { n_depense } = req.params;
-  const { n_Etab, depense,description } = req.body;
+  const { n_Etab, depense, description } = req.body;
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  const decodedToken = jwt.decode(token);
+  if (!decodedToken || !decodedToken.email) {
+    return res.status(400).json({ message: 'Token invalide ou email manquant' });
+  }
+  const email = decodedToken.email;
+
   try {
     const connection = await connectDB();
-    await connection.execute('UPDATE Depense SET n_Etab = ?, depense = ?,description = ? WHERE n_depense = ?', [n_Etab, depense,description, n_depense]);
+    await connection.execute('SET @current_user_email = ?', [email]); // Insérer l'email ici
+    await connection.execute('UPDATE Depense SET n_Etab = ?, depense = ?, description = ? WHERE n_depense = ?', [n_Etab, depense, description, n_depense]);
     connection.end();
     res.json({ message: 'Dépense mise à jour avec succès' });
   } catch (error) {
@@ -231,10 +226,21 @@ app.put('/depenses/:n_depense', async (req, res) => {
   }
 });
 
+
 app.delete('/depenses/:n_depense', async (req, res) => {
   const { n_depense } = req.params;
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  const decodedToken = jwt.decode(token);
+  if (!decodedToken || !decodedToken.email) {
+    return res.status(400).json({ message: 'Token invalide ou email manquant' });
+  }
+  const email = decodedToken.email;
+
   try {
     const connection = await connectDB();
+    await connection.execute('SET @current_user_email = ?', [email]); // Insérer l'email ici
     await connection.execute('DELETE FROM Depense WHERE n_depense = ?', [n_depense]);
     connection.end();
     res.json({ message: 'Dépense supprimée avec succès' });

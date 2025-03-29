@@ -80,6 +80,8 @@ function AuditList() {
                             <TableCell align="right">Nom</TableCell>
                             <TableCell align="right">Ancienne dépense</TableCell>
                             <TableCell align="right">Nouvelle dépense</TableCell>
+                            <TableCell align="right">Nouvelle budget</TableCell>
+
                             <TableCell align="right">Utilisateur</TableCell>
                         </TableRow>
                     </TableHead>
@@ -97,6 +99,8 @@ function AuditList() {
                                 <TableCell align="right">{audit.nom}</TableCell>
                                 <TableCell align="right">{audit.ancien_depense}</TableCell>
                                 <TableCell align="right">{audit.nouv_depense}</TableCell>
+                                <TableCell align="right">{audit.nouveau_budget}</TableCell>
+
                                 <TableCell align="right">{audit.utilisateur}</TableCell>
                             </TableRow>
                         ))}

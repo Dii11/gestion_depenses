@@ -24,17 +24,17 @@ import {
   EditDialogDepense,
 } from "../../../components/BoiteDeDialog";
 
-function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormulaire }) { // Ajout de la prop etablissements
+function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormulaire }) {
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [selectedDepense, setSelectedDepense] = useState(null); // Nom mis à jour
+  const [selectedDepense, setSelectedDepense] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleEditClick = (depense) => { 
-    setSelectedDepense(depense); 
+  const handleEditClick = (depense) => {
+    setSelectedDepense(depense);
     setOpenEditDialog(true);
   };
 
@@ -68,14 +68,20 @@ function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormu
   const handleSearchChange = useCallback((event) => {
     setSearchTerm(event.target.value);
     setPage(0);
-  },);
+  }, []);
 
   const filteredDepenses = useMemo(() => {
-  return depenses.filter((depense) => {
-    const n_Etab = (depense.n_Etab || 0).toString(); 
-    return n_Etab.includes(searchTerm);
-  });
-}, [depenses, searchTerm]);
+    return depenses.filter((depense) => {
+      const n_Etab = (depense.n_Etab || 0).toString();
+      return n_Etab.includes(searchTerm);
+    });
+  }, [depenses, searchTerm]);
+
+  const getEtablissementName = (n_Etab) => {
+    const etablissement = etablissements.find((e) => e.n_Etab === n_Etab);
+    return etablissement ? etablissement.nom : "Inconnu";
+  };
+
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, filteredDepenses.length - page * rowsPerPage);
 
   return (
@@ -118,7 +124,7 @@ function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormu
           <TableHead>
             <TableRow>
               <TableCell><strong aria-label="Numéro de la dépense">N° Dépense</strong></TableCell>
-              <TableCell align="right"><strong aria-label="Numéro d'établissement">N° Etab</strong></TableCell>
+              <TableCell align="right"><strong aria-label="Nom de l'établissement">Nom Etab</strong></TableCell>
               <TableCell align="right"><strong aria-label="Montant de la dépense">Description</strong></TableCell>
               <TableCell align="right"><strong aria-label="Montant de la dépense">Dépense</strong></TableCell>
               <TableCell align="right"><strong aria-label="Actions sur la dépense">Actions</strong></TableCell>
@@ -131,7 +137,7 @@ function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormu
             ).map((depense) => (
               <TableRow key={depense.n_depense} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell component="th" scope="row">{depense.n_depense}</TableCell>
-                <TableCell align="right">{depense.n_Etab}</TableCell>
+                <TableCell align="right">{getEtablissementName(depense.n_Etab)}</TableCell>
                 <TableCell align="right">{depense.description}</TableCell>
                 <TableCell align="right">{depense.depense}</TableCell>
                 <TableCell align="right">
@@ -142,7 +148,7 @@ function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormu
             ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 5 * emptyRows }}>
-                <TableCell colSpan={4} />
+                <TableCell colSpan={6} />
               </TableRow>
             )}
           </TableBody>
@@ -158,14 +164,13 @@ function DepenseList({ depenses, onEdit, onDelete, etablissements, afficherFormu
         />
       </TableContainer>
 
-      <EditDialogDepense 
+      <EditDialogDepense
         open={openEditDialog}
         onClose={handleClose}
-        depense={selectedDepense} 
+        depense={selectedDepense}
         etablissements={etablissements}
         onEdit={onEdit}
       />
-        
 
       <ConfirmationDialog
         open={confirmOpen}

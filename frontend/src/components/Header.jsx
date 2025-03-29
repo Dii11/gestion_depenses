@@ -59,8 +59,7 @@ const Header = () => {
         
       <Lottie animationData={Logo} style={{ height: 100, width: 100 }} />
       </div>
-      <div className="espace_compte">
-        <span>{userName}</span>
+      <div className="">
         <IconButton
           color="primary"
           aria-label="déconnexion"
